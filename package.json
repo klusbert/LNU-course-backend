@@ -5,7 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node -r dotenv/config src/server.js",
+    "lint": "npx eslint ./src || exit 0",
+    "lint:fix": "npx eslint ./src --fix || exit 0"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,8 @@
     "eslint-plugin-jsdoc": "^30.7.8",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^5.0.0"
+    "eslint-plugin-standard": "^5.0.0",
+    "dotenv": "^8.2.0"
   },
   "eslintConfig": {
     "extends": "@lnu"
@@ -27,6 +30,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongose": "0.0.2-security"
+    "express": "^4.17.1",
+    "mongoose": "^5.12.2",
+    "mongose": "0.0.2-security",
+    "morgan": "^1.10.0"
   }
 }
