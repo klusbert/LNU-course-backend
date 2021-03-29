@@ -1,0 +1,32 @@
+{
+  "name": "lnu-courses-api",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.klusbert.xyz:klusbert/lnu-courses-api.git"
+  },
+  "devDependencies": {
+    "@lnu/eslint-config": "^1.1.2",
+    "eslint": "^7.14.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsdoc": "^30.7.8",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^5.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@lnu"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongose": "0.0.2-security"
+  }
+}
