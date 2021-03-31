@@ -18,7 +18,7 @@ async function main () {
   app.use(express.urlencoded({ extended: false }))
 
   // Register routes.
-  app.use('/', router)
+  app.use('/api', router)
 
   app.get('/users', (req, res) => {
     return res.send('GET HTTP method on user resource')

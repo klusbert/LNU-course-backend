@@ -6,4 +6,5 @@ export const router = express.Router()
 const controller = new CourseController()
 
 router.get('/allcourses', controller.allCourses)
-router.get('/coursegroup:id', controller.courseGroup)
+router.get('/coursegroup/:groupdID', controller.courseGroup)
+router.get('/search/:query', controller.search)
