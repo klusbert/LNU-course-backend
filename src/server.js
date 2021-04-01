@@ -1,4 +1,8 @@
 import express from 'express'
+import helmet from 'helmet'
+import morgan from 'morgan'
+
+import cors from 'cors'
 
 import Database from './model/Database.js'
 import { router } from './routes/router.js'
@@ -15,16 +19,18 @@ let mongo = null
 async function main () {
   mongo = await db.getConnection()
 
-  app.use(express.urlencoded({ extended: false }))
+  app.use(express.json())
+
+  // enabling CORS for all requests
+  app.use(cors())
+
+  // adding morgan to log HTTP requests
+  app.use(morgan('combined'))
+  // Starts the HTTP server listening for connections.
 
   // Register routes.
   app.use('/api', router)
 
-  app.get('/users', (req, res) => {
-    return res.send('GET HTTP method on user resource')
-  })
-
-  // Starts the HTTP server listening for connections.
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)
     console.log('Press Ctrl-C to terminate...')

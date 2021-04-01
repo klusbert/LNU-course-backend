@@ -21,7 +21,7 @@ export class CourseController {
   }
 
   /**
-   * Finds coureses that belong to a specific group
+   * Finds coureses that belong to a specific group.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -51,6 +51,7 @@ export class CourseController {
     const result = []
     coursesByTitle.forEach(c => { result.push(c) })
     coursesByID.forEach(c => { result.push(c) })
+    coursesByEnglishTitle.forEach(c => { result.push(c) })
 
     res.json(result)
   }
