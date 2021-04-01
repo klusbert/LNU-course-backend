@@ -16,7 +16,8 @@ export class CourseController {
    */
   async allCourses (req, res) {
     const courses = await Course.find({})
-    return res.send(JSON.stringify(courses))
+
+    res.json(courses.map(c => c.courseTitle))
   }
 
   /**
@@ -27,8 +28,10 @@ export class CourseController {
    * @returns {JSON} - Course list.
    */
   async courseGroup (req, res) {
-    const courses = await Course.find({ courseGroup: req.params.groupdID.toUpperCase() })
-    return res.send(JSON.stringify(courses.map(c => c.courseGroup)))
+    const query = req.params.query
+    const regex = new RegExp(query, 'i')
+    const courses = await Course.find({ courseGroup: { $regex: regex } })
+    res.json(courses.map(c => c.courseTitle))
   }
 
   /**
@@ -44,14 +47,11 @@ export class CourseController {
     const regex = new RegExp(query, 'i')
     const coursesByTitle = await Course.find({ courseTitle: { $regex: regex } })
     const coursesByID = await Course.find({ courseID: { $regex: regex } })
-
-    coursesByTitle.concat(coursesByID)
-    console.log(coursesByTitle)
-
+    const coursesByEnglishTitle = await Course.find({ courseTitleEnglish: { $regex: regex } })
     const result = []
     coursesByTitle.forEach(c => { result.push(c) })
     coursesByID.forEach(c => { result.push(c) })
 
-    res.json(result.map(c => c.courseTitle))
+    res.json(result)
   }
 }
