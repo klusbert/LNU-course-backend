@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import LNUAuthenticator from '../model/LNUAuthenticator.js'
+import LNUAuthenticator from '../model/LNUAuthPupp.js'
 const tokenSecret = process.env.TOKEN_SECRET
 
 /**
@@ -19,9 +19,16 @@ export class AuthController {
     if (userName || password) {
       const lnuAuth = new LNUAuthenticator(userName, password)
 
-      const authenticated = await lnuAuth.authenticate()
-      if (authenticated) {
-        return res.status(200).json({ token: this.generateToken(userName), userName: userName })
+      const authObject = await lnuAuth.authenticate()
+      if (authObject.authenticated) {
+        req.session.userName = userName
+        req.session.loggedIn = true
+        req.session.firstName = authObject.firstName
+        req.session.lastName = authObject.lastName
+        req.session.token = this.generateToken(userName)
+
+        return res.status(200).json()
+        // return res.status(200).json({ token: this.generateToken(userName), userName: userName, firstName: authObject.firstName, lastName: authObject.lastName })
       }
     }
 
@@ -59,18 +66,16 @@ export class AuthController {
    * @returns {object} - status code.
    */
   verifyToken (req, res, next) {
-    const token = req.body.token
+    const token = req.session.token
 
     if (token) {
       try {
         const decoded = jwt.verify(token, tokenSecret)
 
         if (decoded) {
-          if (req.body.userName === decoded.data) {
-            req.userName = decoded.data
-            next()
-            return
-          }
+          req.userName = decoded.data
+          next()
+          return
         }
       } catch (e) {
         return res.status(403).json({ error: 'please provide a valid token' })

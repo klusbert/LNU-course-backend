@@ -23,7 +23,7 @@ export default class LNUAuthenticator {
   async authenticate () {
     const userName = this._userName
     const pw = this._password
-    const s = await fetch('https://coursepress.lnu.se/wp-login.php', {
+    const s = await fetch('https://mymoodle.lnu.se/login/index.php', {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
