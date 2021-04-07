@@ -1,11 +1,20 @@
 import jwt from 'jsonwebtoken'
 import LNUAuthenticator from '../model/LNUAuthPupp.js'
+
+import TokenHelper from '../model/TokenHelper.js'
 const tokenSecret = process.env.TOKEN_SECRET
 
 /**
  * Big thanks to https://www.section.io/engineering-education/node-authentication-api/
  */
 export class AuthController {
+  /**
+   * Initializes an instance of tokenHelper.
+   */
+  constructor () {
+    this._tokenHelper = new TokenHelper()
+  }
+
   /**
    * Get index.
    *
@@ -27,12 +36,12 @@ export class AuthController {
         req.session.lastName = authObject.lastName
         req.session.token = this.generateToken(userName)
 
-        return res.status(200).json()
+        return res.status(200).json({ loggedIn: true })
         // return res.status(200).json({ token: this.generateToken(userName), userName: userName, firstName: authObject.firstName, lastName: authObject.lastName })
       }
     }
 
-    return res.status(403).json({ error: 'Auth failed.' }) // access denied!
+    return res.status(403).json({ loggedIn: false }) // access denied!
   }
 
   /**
@@ -66,17 +75,12 @@ export class AuthController {
    * @returns {object} - status code.
    */
   verifyToken (req, res, next) {
-    const token = req.session.token
-
+    const token = this._tokenHelper.verifyToken(req.session.token)
     if (token) {
       try {
-        const decoded = jwt.verify(token, tokenSecret)
-
-        if (decoded) {
-          req.userName = decoded.data
-          next()
-          return
-        }
+        req.userName = token.data
+        next()
+        return
       } catch (e) {
         return res.status(403).json({ error: 'please provide a valid token' })
       }
