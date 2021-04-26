@@ -17,7 +17,8 @@ export class CourseController {
   async allCourses (req, res) {
     const courses = await Course.find({})
 
-    res.json(courses.map(c => c.courseTitle))
+    courses.sort((a, b) => (a.courseTitle > b.courseTitle) ? 1 : -1)
+    res.json(courses)
   }
 
   /**
@@ -31,7 +32,7 @@ export class CourseController {
     const query = req.params.query
     const regex = new RegExp(query, 'i')
     const courses = await Course.find({ courseGroup: { $regex: regex } })
-    res.json(courses.map(c => c.courseTitle))
+    res.json(courses)
   }
 
   /**
@@ -51,8 +52,15 @@ export class CourseController {
     const result = []
     coursesByTitle.forEach(c => { result.push(c) })
     coursesByID.forEach(c => { result.push(c) })
-    coursesByEnglishTitle.forEach(c => { result.push(c) })
 
+    coursesByEnglishTitle.forEach(c => {
+      // only add if we don't have it already...
+      if (result.filter(e => e.courseID === c.courseID).length === 0) {
+        result.push(c)
+      }
+    })
+
+    result.sort((a, b) => (a.courseTitle > b.courseTitle) ? 1 : -1)
     res.json(result)
   }
 }

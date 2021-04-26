@@ -7,7 +7,8 @@ import cors from 'cors'
 import Database from './model/Database.js'
 import { router } from './routes/router.js'
 
-const db = new Database(process.env.CONNECTION_STRING, process.env.MONGO_DATABASE_NAME)
+const mongoConnectionString = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@cluster0.zv6lx.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true`
+const db = new Database(mongoConnectionString, process.env.MONGO_DATABASE_NAME)
 const port = process.env.PORT
 
 const app = express()
@@ -24,6 +25,9 @@ async function main () {
   // enabling CORS for all requests
   app.use(cors())
 
+  // Make the server more secure, by setting various http headers.(helps against XSS attacks,
+  app.use(helmet())
+
   // adding morgan to log HTTP requests
   app.use(morgan('combined'))
   // Starts the HTTP server listening for connections.
@@ -38,6 +42,11 @@ async function main () {
       sameSite: 'lax' // The default value of cookies, but to explain it does not send the cookie to other sites, only on the origin site.(CSRF)
     }
   }
+  if (app.get('env') === 'production') {
+    app.set('trust proxy', 1) // trust communication between nginx and our application to be secure.
+    sessionOptions.cookie.secure = true // ensure that cookies only send over HTTPS(except our trusted proxy)
+  }
+
   app.use(session(sessionOptions))
 
   // Register routes.
@@ -49,7 +58,7 @@ async function main () {
   })
 }
 
-main().then(console.error)
+main().catch(console.error)
 // if application exits we close the connection to mongo.
 process.on('SIGINT', () => {
   if (mongo != null)mongo.connection.close()
