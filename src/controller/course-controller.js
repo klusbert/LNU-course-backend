@@ -51,8 +51,15 @@ export class CourseController {
     const result = []
     coursesByTitle.forEach(c => { result.push(c) })
     coursesByID.forEach(c => { result.push(c) })
-    coursesByEnglishTitle.forEach(c => { result.push(c) })
 
+    coursesByEnglishTitle.forEach(c => {
+      // only add if we don't have it already...
+      if (result.filter(e => e.courseID === c.courseID).length === 0) {
+        result.push(c)
+      }
+    })
+
+    result.sort((a, b) => (a.courseTitle > b.courseTitle) ? 1 : -1)
     res.json(result)
   }
 }
