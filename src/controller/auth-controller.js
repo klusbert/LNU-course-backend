@@ -30,13 +30,7 @@ export class AuthController {
 
       const authObject = await lnuAuth.authenticate()
       if (authObject.authenticated) {
-        req.session.userName = userName
-        req.session.loggedIn = true
-        req.session.firstName = authObject.firstName
-        req.session.lastName = authObject.lastName
-        req.session.token = this.generateToken(userName)
-
-        return res.status(200).json({ loggedIn: true })
+        return res.status(200).json({ loggedIn: true, token: this.generateToken(userName), userName: userName })
         // return res.status(200).json({ token: this.generateToken(userName), userName: userName, firstName: authObject.firstName, lastName: authObject.lastName })
       }
     }

@@ -26,19 +26,6 @@ async function main () {
 
   // adding morgan to log HTTP requests
   app.use(morgan('combined'))
-  // Starts the HTTP server listening for connections.
-  const sessionOptions = {
-    name: process.env.SESSION_NAME,
-    secret: process.env.SESSION_SECRET,
-    resave: false, // Don't resave even if a request is not changing the session.
-    saveUninitialized: false, // Don't save a created but not modified session.
-    cookie: {
-      httpOnly: true, // Prevents cookies to be accessed by the browsers javascript.(XSS)
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-      sameSite: 'lax' // The default value of cookies, but to explain it does not send the cookie to other sites, only on the origin site.(CSRF)
-    }
-  }
-  app.use(session(sessionOptions))
 
   // Register routes.
   app.use('/api', router)
