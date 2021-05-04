@@ -2,11 +2,12 @@ import mongoose from 'mongoose'
 
 const reviewSchema = new mongoose.Schema({
 
-  message: { type: String },
-  rating: { type: Number, min: 0, max: 5 },
-  anonym: { type: Boolean },
+  courseID: { type: String, required: true },
+  message: { type: String, required: true },
+  rating: { type: Number, min: 0, max: 5, required: true },
+  anonymous: { type: Boolean },
   studentID: { type: String, required: true },
-  score: { type: Number } // thumbs up
+  score: [] // list of student who liked this review.
 })
 
 export const Review = mongoose.model('Review', reviewSchema)

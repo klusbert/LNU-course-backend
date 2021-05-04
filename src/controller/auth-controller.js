@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
-import LNUAuthenticator from '../model/LNUAuthPupp.js'
+import LNUAuthenticator from '../model/LNUAuthPuppeteer.js'
+import LNUAuthenticatorasd from '../model/LNUAuthenticator.js'
 
 import TokenHelper from '../model/TokenHelper.js'
 const tokenSecret = process.env.TOKEN_SECRET
@@ -30,8 +31,7 @@ export class AuthController {
 
       const authObject = await lnuAuth.authenticate()
       if (authObject.authenticated) {
-        return res.status(200).json({ loggedIn: true, token: this.generateToken(userName), userName: userName })
-        // return res.status(200).json({ token: this.generateToken(userName), userName: userName, firstName: authObject.firstName, lastName: authObject.lastName })
+        return res.status(200).json({ loggedIn: true, token: this.generateToken(userName), userName: userName, firstName: authObject.firstName, lastName: authObject.lastName })
       }
     }
 
@@ -69,10 +69,11 @@ export class AuthController {
    * @returns {object} - status code.
    */
   verifyToken (req, res, next) {
-    const token = this._tokenHelper.verifyToken(req.session.token)
+    const token = this._tokenHelper.verifyToken(req.body.token)
     if (token) {
       try {
         req.userName = token.data
+        res.locals.userName = token.data
         next()
         return
       } catch (e) {

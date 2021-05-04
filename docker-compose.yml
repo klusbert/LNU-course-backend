@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+    lnu_api:
+        environment:
+            - PORT=8080
+            - CONNECTION_STRING=mongodb://192.168.0.101:27017
+            - MONGO_DATABASE_NAME=courses
+            - TOKEN_SECRET=23423980423894
+        ports:
+            - '5551:8080'
+        image: klusbert/lnu-api
