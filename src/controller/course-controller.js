@@ -80,11 +80,19 @@ export class CourseController {
 
     const course = await Course.find({ courseID: courseID.toUpperCase() })
     if (course.length > 0) {
-      const courseReview = await Review.find({ courseID: courseID.toUpperCase() })
+      const courseReviews = await Review.find({ courseID: courseID.toUpperCase() })
 
-      console.log(courseReview.length)
+      let totalRating = 0
+      // hide anonymous users from the client
+      for (let i = 0; i < courseReviews.length; i++) {
+        if (courseReviews[i].anonymous) {
+          courseReviews[i].studentID = 'Anonymous'
+        }
+        totalRating += courseReviews[i].rating
+      }
 
-      return res.status(200).json({ course: course, reviews: courseReview })
+      const reviews = { totalRating: totalRating / courseReviews.length, courseReviews }
+      return res.status(200).json({ course: course, review: reviews })
     } else {
       return res.status(404).json('Not found') // not found!
     }
@@ -114,6 +122,7 @@ export class CourseController {
       newReview.courseID = courseID.toUpperCase()
       newReview.message = req.body.message
       newReview.rating = req.body.rating
+
       newReview.anonymous = req.body.anonymous
       newReview.studentID = req.body.studentID
       await newReview.save()

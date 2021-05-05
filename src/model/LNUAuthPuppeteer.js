@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer'
 /**
  *
  */
-export default class LNUAuthPupp {
+export default class LNUAuthPuppeteer {
   /**
    * Init the LNUAuthenticator.
    *

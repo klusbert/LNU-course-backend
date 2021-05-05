@@ -1,9 +1,1 @@
-$ docker run -d \
-              -e PORT=5551 \              
-              -e CONNECTION_STRING="mongodb://127.0.0.1:27017/" \
-              -e MONGO_DATABASE_NAME="courses" \
-              -e TOKEN_SECRET="23423980423894" \
-              -e MONGO_PW="JgvpDg9JW0uv4KK4" \
-              -e MONGO_USERNAME="klusbert" \
-              -p 9091:9091 \
-              klusbert/lnu-api
+docker build . -t klusbert/lnu-api
