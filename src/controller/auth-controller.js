@@ -23,7 +23,7 @@ export class AuthController {
    * @returns {object} - status code.
    */
   async login (req, res) {
-    const userName = req.body.userName
+    const userName = req.body.username
     const password = req.body.password
     if (userName === 'test' && password === 'test') { return res.status(200).json({ loggedIn: true, token: this.generateToken(userName), userName: userName, firstName: 'förnamn', lastName: 'efternamn' }) }
     if (userName || password) {
