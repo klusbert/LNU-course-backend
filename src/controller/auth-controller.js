@@ -39,17 +39,6 @@ export class AuthController {
   }
 
   /**
-   * A function that cannot be called if not authenticated.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @returns {object} - status code.
-   */
-  async mySecretFunction (req, res) {
-    return res.status(200).json({ allowed: req.userName })
-  }
-
-  /**
    * Generates a token on successfully login!.
    *
    * @param {string} userName - Identifier.
