@@ -25,13 +25,13 @@ export class AuthController {
   async login (req, res) {
     const userName = req.body.username
     const password = req.body.password
-    if (userName === 'test' && password === 'test') { return res.status(200).json({ loggedIn: true, token: this.generateToken(userName), userName: userName, firstName: 'förnamn', lastName: 'efternamn' }) }
+    if (userName === 'test' && password === 'test') { return res.status(200).json({ token: this.generateToken(userName), userName: userName }) }
     if (userName || password) {
       const lnuAuth = new LNUAuthenticator(userName, password)
 
       const authObject = await lnuAuth.authenticate()
       if (authObject.authenticated) {
-        return res.status(200).json({ loggedIn: true, token: this.generateToken(userName), userName: userName, firstName: authObject.firstName, lastName: authObject.lastName })
+        return res.status(200).json({ token: this.generateToken(userName), userName: userName })
       }
     }
 
