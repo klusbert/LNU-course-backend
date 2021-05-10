@@ -92,7 +92,7 @@ export class CourseController {
       }
 
       const reviews = { totalRating: totalRating / courseReviews.length, courseReviews }
-      return res.status(200).json({ course: course, review: reviews })
+      return res.status(200).json({ course: course[0], review: reviews })
     } else {
       return res.status(404).json('Not found') // not found!
     }
@@ -116,7 +116,7 @@ export class CourseController {
 
     if (res.locals.userName !== req.body.studentID) {
       // access denied!.
-      return res.status(403)
+      return res.status(403).json('Wrong user.')
     }
     if (course.length > 0) {
       newReview.courseID = courseID.toUpperCase()
