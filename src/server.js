@@ -7,7 +7,6 @@ import cors from 'cors'
 import Database from './model/Database.js'
 import { router } from './routes/router.js'
 
-/// const mongoConnectionString = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PW}@cluster0.zv6lx.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true`
 const db = new Database(process.env.CONNECTION_STRING, process.env.MONGO_DATABASE_NAME)
 const port = process.env.PORT
 

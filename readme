@@ -1,1 +1,4 @@
 docker build . -t klusbert/lnu-api
+
+# Search courses
+/api/courses/search/

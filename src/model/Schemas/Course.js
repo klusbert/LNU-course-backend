@@ -4,6 +4,8 @@ const courseSchema = new mongoose.Schema({
 
   courseTitle: { type: String, index: true },
   courseTitleEnglish: { type: String },
+  courseDescription: { type: String },
+  courseDescriptionEnglish: { type: String },
   courseID: { type: String },
   courseLevel: { type: String },
   syllabus: { type: String },
