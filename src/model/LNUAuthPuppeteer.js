@@ -46,6 +46,7 @@ export default class LNUAuthPuppeteer {
       })
       const firstName = userFullName.split(' ')[0]
       const lastName = userFullName.split(' ')[1]
+      browser.close()
       return { authenticated: true, firstName: firstName, lastName: lastName }
     } else {
       return { authenticated: false }
