@@ -113,7 +113,11 @@ export class CourseController {
 
     // to support lowercase
     const course = await Course.find({ courseID: courseID.toUpperCase() })
+    const exist = await Review.find({ courseID: courseID.toUpperCase(), studentID: req.body.studentID })
 
+    if (exist.length > 0) {
+      return res.status(200).json('Du kan inte recensera samma kurs flera gånger.')
+    }
     if (res.locals.userName !== req.body.studentID) {
       // access denied!.
       return res.status(403).json('Wrong user.')
