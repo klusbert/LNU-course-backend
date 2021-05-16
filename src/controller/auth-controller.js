@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import LNUAuthenticator from '../model/LNUAuthPuppeteer.js'
-
+// import LNUAuthenticator from '../model/LNUAuthPuppeteer.js'
+import LNUAuthenticator from '../model/LNUAuth.js'
 import TokenHelper from '../model/TokenHelper.js'
 const tokenSecret = process.env.TOKEN_SECRET
 
