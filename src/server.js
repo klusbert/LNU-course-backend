@@ -7,7 +7,7 @@ import cors from 'cors'
 import Database from './model/Database.js'
 import { router } from './routes/router.js'
 
-const db = new Database(process.env.CONNECTION_STRING, process.env.MONGO_DATABASE_NAME)
+const db = new Database('mongodb://192.168.0.101:27017/', 'courses')
 const port = process.env.PORT
 
 const app = express()
@@ -17,6 +17,7 @@ let mongo = null
  * Start point of the server.
  */
 async function main () {
+  console.log(process.env.MONGO_DATABASE_NAME)
   mongo = await db.getConnection()
 
   app.use(express.json())
@@ -39,7 +40,7 @@ async function main () {
   })
 }
 
-main().catch(console.error())
+main().catch()
 // if application exits we close the connection to mongo.
 process.on('SIGINT', () => {
   if (mongo != null) mongo.connection.close()

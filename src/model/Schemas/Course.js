@@ -15,7 +15,7 @@ const courseSchema = new mongoose.Schema({
   prerequisites: { type: String },
   courseURL: { type: String, unique: true },
   isDistance: { type: Boolean },
-  courseSpeed: { type: Number }
+  courseSpeed: { type: String }
 
 })
 
