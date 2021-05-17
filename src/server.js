@@ -7,7 +7,7 @@ import cors from 'cors'
 import Database from './model/Database.js'
 import { router } from './routes/router.js'
 
-const db = new Database('mongodb://192.168.0.101:27017/', 'courses')
+const db = new Database(process.env.CONNECTION_STRING, process.env.MONGO_DATABASE_NAME)
 const port = process.env.PORT
 
 const app = express()
