@@ -35,7 +35,7 @@ export class AuthController {
       }
     }
 
-    return res.status(403).json({ loggedIn: false }) // access denied!
+    return res.status(200).json({ loggedIn: false }) // access denied!
   }
 
   /**
