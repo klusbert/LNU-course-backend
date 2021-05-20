@@ -18,8 +18,8 @@ sudo apt-get install -y nodejs
 sudo npm install pm2 -g
 
 ## Clone repo
-git clone https://gitlab.klusbert.xyz/klusbert/lnu-courses-api.git
-cd lnu-courses-api
+git clone https://github.com/klusbert/LNU-course-backend.git
+cd LNU-course-backend
 
 ## Start the server
 
@@ -27,3 +27,9 @@ First we need to update the mongo connection string, we use mongo atlas and they
 npm i
 pm2 start ecosystem.config.cjs --env production
 
+
+## Update running server
+ssh into the target backend and cd to LNU-course-backend
+type "git pull"
+
+The server should now reconfigure it self, sometimes git pull overwrite ecosystem.config.cjs, in that case we need to update mongoconnection string and save it.
