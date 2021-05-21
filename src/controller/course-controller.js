@@ -177,9 +177,15 @@ export class CourseController {
       }
 
       if (review.score.includes(res.locals.userName)) {
-        return res.status(403).json('You can only score one course once!')
+        const index = review.score.indexOf(res.locals.userName)
+
+        if (index > -1) {
+          review.score.splice(index, 1)
+        }
+      } else {
+        review.score.push(res.locals.userName)
       }
-      review.score.push(res.locals.userName)
+
       await review.save()
       return res.status(200).json('success')
     }
