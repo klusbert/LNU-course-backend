@@ -137,6 +137,38 @@ export class CourseController {
   }
 
   /**
+   * Change a existing review with new content.
+   * Note that in order to get to this call verify token must return true.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @returns {JSON} - response
+   */
+  async editReview (req, res) {
+    const reviewID = req.body.reviewID
+    const message = req.body.message
+    const rating = req.body.rating
+    const anonymous = req.body.anonymous
+    const studentID = req.body.studentID
+
+    const review = await Review.findById(reviewID)
+    if (review.studentID !== studentID) {
+      return res.status(403).json('You cannot edit this review')
+    }
+    if (review) {
+      review.message = message
+      review.rating = rating
+      review.anonymous = anonymous
+      review.studentID = studentID
+
+      await review.save()
+      return res.status(202).json('success')
+    } else {
+      return res.status(404).json('Could not find review')
+    }
+  }
+
+  /**
    * Add a score to a review(thumbs up!).
    *
    * @param {object} req - Express request object.
