@@ -33,8 +33,8 @@ We use mongo atlas and they provide connection string.
 
 ## Update running server
 ssh into the target backend and cd to LNU-course-backend
-then type:
+then type: Both backends servers started from another repository so we need to update those servers we need to specify that we want to pull from github and from the master branch. If this is a new installation we only have to use git pull
 
-    git pull
+    git pull github master
 
 The server should now reconfigure it self, sometimes git pull overwrite ecosystem.config.cjs, in that case we need to update mongoconnection string and save it.
