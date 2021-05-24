@@ -173,6 +173,8 @@ export class CourseController {
 
       await review.save()
       return res.status(200).json(SCORE_REVIEW)
+    } else {
+      return res.status(200).json({ SCORE_REVIEW_FAIL, message: 'Kunde inte hitta review ' + reviewID })
     }
   }
 }
