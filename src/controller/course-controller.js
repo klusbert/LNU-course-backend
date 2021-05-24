@@ -5,7 +5,7 @@ import { Course } from '../model/Schemas/Course.js'
 import { Review } from '../model/Schemas/Review.js'
 import TokenHelper from '../model/TokenHelper.js'
 
-import { SCORE_REVIEW_FAIL, SCORE_REVIEW, POST_REVIEW_FAIL, GET_COURSE_BY_ID_FAILED, POST_REVIEW, EDIT_REVIEW } from './types.js'
+import { SCORE_REVIEW_FAIL, SCORE_REVIEW, POST_REVIEW_FAIL, GET_COURSE_BY_ID_FAILED, POST_REVIEW, EDIT_REVIEW, EDIT_REVIEW_FAIL } from './types.js'
 
 /**
  *
