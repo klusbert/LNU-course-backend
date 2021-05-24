@@ -5,6 +5,8 @@ import { Course } from '../model/Schemas/Course.js'
 import { Review } from '../model/Schemas/Review.js'
 import TokenHelper from '../model/TokenHelper.js'
 
+import { SCORE_REVIEW_FAIL, SCORE_REVIEW, POST_REVIEW_FAIL, GET_COURSE_BY_ID_FAILED, POST_REVIEW, EDIT_REVIEW } from './types.js'
+
 /**
  *
  */
@@ -14,34 +16,6 @@ export class CourseController {
    */
   constructor () {
     this._tokenHelper = new TokenHelper()
-  }
-
-  /**
-   * Get index.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @returns {JSON} - Course list.
-   */
-  async allCourses (req, res) {
-    const courses = await Course.find({})
-
-    courses.sort((a, b) => (a.courseTitle > b.courseTitle) ? 1 : -1)
-    res.json(courses)
-  }
-
-  /**
-   * Finds coureses that belong to a specific group.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @returns {JSON} - Course list.
-   */
-  async courseGroup (req, res) {
-    const query = req.params.query
-    const regex = new RegExp(query, 'i')
-    const courses = await Course.find({ courseGroup: { $regex: regex } })
-    res.json(courses)
   }
 
   /**
@@ -83,8 +57,6 @@ export class CourseController {
       userName = this._tokenHelper.verifyToken(token).data
     }
 
-    console.log(userName)
-
     const course = await Course.find({ courseID: courseID.toUpperCase() })
     if (course.length > 0) {
       const courseReviews = await Review.find({ courseID: courseID.toUpperCase() })
@@ -102,7 +74,7 @@ export class CourseController {
       const reviews = { totalRating: totalRating / courseReviews.length, courseReviews }
       return res.status(200).json({ course: course[0], review: reviews })
     } else {
-      return res.status(404).json('Not found') // not found!
+      return res.status(200).json(GET_COURSE_BY_ID_FAILED) // not found!
     }
   }
 
@@ -124,7 +96,7 @@ export class CourseController {
     const exist = await Review.find({ courseID: courseID.toUpperCase(), studentID: req.body.studentID })
 
     if (exist.length > 0) {
-      return res.status(200).json('Du kan inte recensera samma kurs flera gånger.')
+      return res.status(200).json({ POST_REVIEW_FAIL, message: 'Du kan inte recensera samma kurs flera gånger.' })
     }
     if (res.locals.userName !== req.body.studentID) {
       // access denied!.
@@ -138,9 +110,9 @@ export class CourseController {
       newReview.anonymous = req.body.anonymous
       newReview.studentID = req.body.studentID
       await newReview.save()
-      return res.status(200).json('success')
+      return res.status(200).json(POST_REVIEW)
     } else {
-      return res.status(404).json('Not found') // not found!
+      return res.status(200).json({ POST_REVIEW_FAIL, message: 'Kan inte hitta kursen' })
     }
   }
 
@@ -160,9 +132,6 @@ export class CourseController {
     const studentID = req.body.studentID
 
     const review = await Review.findById(reviewID)
-    if (review.studentID !== studentID) {
-      return res.status(403).json('You cannot edit this review')
-    }
     if (review) {
       review.message = message
       review.rating = rating
@@ -170,9 +139,9 @@ export class CourseController {
       review.studentID = studentID
 
       await review.save()
-      return res.status(202).json('success')
+      return res.status(200).json(EDIT_REVIEW)
     } else {
-      return res.status(404).json('Could not find review')
+      return res.status(200).json({ EDIT_REVIEW_FAIL, message: 'Kan inte hitta review.' })
     }
   }
 
@@ -189,7 +158,7 @@ export class CourseController {
 
     if (review) {
       if (res.locals.userName === review.studentID) {
-        return res.status(403).json('You cannot score your own review.')
+        return res.status(200).json({ SCORE_REVIEW_FAIL, message: 'Du kan inte rata din egen review.' })
       }
 
       if (review.score.includes(res.locals.userName)) {
@@ -203,7 +172,7 @@ export class CourseController {
       }
 
       await review.save()
-      return res.status(200).json('success')
+      return res.status(200).json(SCORE_REVIEW)
     }
   }
 }

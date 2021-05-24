@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 // import LNUAuthenticator from '../model/LNUAuthPuppeteer.js'
 import LNUAuthenticator from '../model/LNUAuth.js'
 import TokenHelper from '../model/TokenHelper.js'
-const tokenSecret = process.env.TOKEN_SECRET
 
 /**
  * Big thanks to https://www.section.io/engineering-education/node-authentication-api/
@@ -13,6 +12,7 @@ export class AuthController {
    */
   constructor () {
     this._tokenHelper = new TokenHelper()
+    this._tokenSecret = process.env.TOKEN_SECRET
   }
 
   /**
@@ -45,7 +45,7 @@ export class AuthController {
    * @returns {string} - SessionToken.
    */
   generateToken (userName) {
-    return jwt.sign({ data: userName }, tokenSecret, { expiresIn: '24h' })
+    return jwt.sign({ data: userName }, this._tokenSecret, { expiresIn: '24h' })
   }
 
   /**

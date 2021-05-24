@@ -9,8 +9,6 @@ const controller = new CourseController()
 
 const authcontroller = new AuthController()
 
-router.get('/allcourses', controller.allCourses)
-router.get('/coursegroup/:query', controller.courseGroup)
 router.get('/search/:query', controller.search)
 
 // router.post('/postreview', (req, res, next) => authcontroller.verifyToken(req, res, next), (req, res) => controller.addReview(req, res))
