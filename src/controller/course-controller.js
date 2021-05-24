@@ -3,11 +3,19 @@
  */
 import { Course } from '../model/Schemas/Course.js'
 import { Review } from '../model/Schemas/Review.js'
+import TokenHelper from '../model/TokenHelper.js'
 
 /**
  *
  */
 export class CourseController {
+  /**
+   * Initializes an instance of tokenHelper.
+   */
+  constructor () {
+    this._tokenHelper = new TokenHelper()
+  }
+
   /**
    * Get index.
    *
@@ -69,6 +77,13 @@ export class CourseController {
    */
   async getCourse (req, res) {
     const courseID = req.params.query
+    const token = req.body.token
+    let userName = ''
+    if (token) {
+      userName = this._tokenHelper.verifyToken(token).data
+    }
+
+    console.log(userName)
 
     const course = await Course.find({ courseID: courseID.toUpperCase() })
     if (course.length > 0) {
@@ -77,8 +92,9 @@ export class CourseController {
       let totalRating = 0
       // hide anonymous users from the client
       for (let i = 0; i < courseReviews.length; i++) {
-        if (courseReviews[i].anonymous) {
-          courseReviews[i].studentID = 'Anonymous'
+        // let student see their own reviews.
+        if (courseReviews[i].anonymous && courseReviews[i].studentID !== userName) {
+          courseReviews[i].studentID = 'Anonym'
         }
         totalRating += courseReviews[i].rating
       }
