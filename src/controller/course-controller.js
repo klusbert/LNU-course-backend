@@ -76,7 +76,7 @@ export class CourseController {
    * @returns {JSON} - Course list.
    */
   async getCourse (req, res) {
-    const courseID = req.params.query
+    const courseID = req.body.courseID
     const token = req.body.token
     let userName = ''
     if (token) {

@@ -14,7 +14,7 @@ router.get('/coursegroup/:query', controller.courseGroup)
 router.get('/search/:query', controller.search)
 
 // router.post('/postreview', (req, res, next) => authcontroller.verifyToken(req, res, next), (req, res) => controller.addReview(req, res))
-router.post('/course/:query', (req, res) => controller.getCourse(req, res))
+router.post('/course/', (req, res) => controller.getCourse(req, res))
 router.post('/postreview', (req, res, next) => authcontroller.verifyToken(req, res, next), (req, res) => controller.addReview(req, res))
 
 router.post('/scorereview', (req, res, next) => authcontroller.verifyToken(req, res, next), (req, res) => controller.scoreReview(req, res))
