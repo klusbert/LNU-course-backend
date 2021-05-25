@@ -14,7 +14,7 @@ export class CourseController {
   /**
    * Initializes an instance of tokenHelper.
    */
-  constructor () {
+  constructor() {
     this._tokenHelper = new TokenHelper()
   }
 
@@ -25,7 +25,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - Course list.
    */
-  async search (req, res) {
+  async search(req, res) {
     const query = req.params.query
 
     const regex = new RegExp(query, 'i')
@@ -49,7 +49,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - Course list.
    */
-  async getCourse (req, res) {
+  async getCourse(req, res) {
     const courseID = req.body.courseID
     const token = req.body.token
     let userName = ''
@@ -86,7 +86,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - response
    */
-  async addReview (req, res) {
+  async addReview(req, res) {
     const newReview = new Review()
 
     const courseID = req.body.courseID
@@ -124,7 +124,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - response
    */
-  async editReview (req, res) {
+  async editReview(req, res) {
     const reviewID = req.body.reviewID
     const message = req.body.message
     const rating = req.body.rating
@@ -152,7 +152,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - response
    */
-  async scoreReview (req, res) {
+  async scoreReview(req, res) {
     const reviewID = req.body.reviewID
     const review = await Review.findById(reviewID)
 
