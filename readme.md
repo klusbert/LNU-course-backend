@@ -1,4 +1,26 @@
-docker build . -t klusbert/lnu-api
+## Dependensies
+This application depends on a mongoDB database with courses and reviews.
+To get the courses into the database use this program https://github.com/klusbert/LNU-Course-scraper
+
+## Run localy
+
+Create a ".env" file in the root folder that contains these variables.
+
+    CONNECTION_STRING="mongodb://127.0.0.1:27017/"
+    MONGO_DATABASE_NAME="courses"
+    PORT="5001"
+    TOKEN_SECRET="My special secret" // change this to something secret!
+    
+
+Connection string is used to connect to the database that has all the courses we scraped.
+The port defines which port the server will listen to.
+Token secret is used to generate tokens, it is important to change this to something else, since tokens can both be encrypted and decrypted with this secret.
+
+
+## Install dependensies.
+        npm i
+## Start the application
+        npm start
 # API calls
 
 | URL                          | METHOD | BODY                                                                                                                                                                     | RETURNS                                           |
