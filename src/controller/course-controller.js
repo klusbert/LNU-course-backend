@@ -226,7 +226,7 @@ export class CourseController {
    * @returns {JSON} - response
    */
   async totalReviews (req, res) {
-    const reviews = Review.find({})
-    return res.status(200).json({ totalReviews: reviews.count() })
+    const reviews = await Review.find({})
+    return res.status(200).json({ totalReviews: reviews.length })
   }
 }
