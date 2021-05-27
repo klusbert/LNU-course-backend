@@ -5,7 +5,15 @@ import { Course } from '../model/Schemas/Course.js'
 import { Review } from '../model/Schemas/Review.js'
 import TokenHelper from '../model/TokenHelper.js'
 
-import { SCORE_REVIEW_FAIL, SCORE_REVIEW, POST_REVIEW_FAIL, GET_COURSE_BY_ID_FAILED, POST_REVIEW, EDIT_REVIEW, EDIT_REVIEW_FAIL } from './types.js'
+import {
+  SCORE_REVIEW_FAIL,
+  SCORE_REVIEW,
+  POST_REVIEW_FAIL,
+  GET_COURSE_BY_ID_FAILED,
+  POST_REVIEW,
+  EDIT_REVIEW,
+  EDIT_REVIEW_FAIL
+} from './types.js'
 
 /**
  *
@@ -14,7 +22,7 @@ export class CourseController {
   /**
    * Initializes an instance of tokenHelper.
    */
-  constructor() {
+  constructor () {
     this._tokenHelper = new TokenHelper()
   }
 
@@ -25,7 +33,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - Course list.
    */
-  async search(req, res) {
+  async search (req, res) {
     const query = req.params.query
 
     const regex = new RegExp(query, 'i')
@@ -33,12 +41,19 @@ export class CourseController {
     const coursesByID = await Course.find({ courseID: { $regex: regex } })
 
     const result = []
-    coursesByTitle.forEach(c => { result.push(c) })
-    coursesByID.forEach(c => { result.push(c) })
+    coursesByTitle.forEach(c => {
+      result.push(c)
+    })
+    coursesByID.forEach(c => {
+      result.push(c)
+    })
 
     result.sort((a, b) => (a.courseTitle > b.courseTitle) ? 1 : -1)
     res.json(result.map((course) => {
-      return { courseTitle: course.courseTitle, courseID: course.courseID }
+      return {
+        courseTitle: course.courseTitle,
+        courseID: course.courseID
+      }
     }))
   }
 
@@ -49,7 +64,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - Course list.
    */
-  async getCourse(req, res) {
+  async getCourse (req, res) {
     const courseID = req.body.courseID
     const token = req.body.token
     let userName = ''
@@ -71,8 +86,14 @@ export class CourseController {
         totalRating += courseReviews[i].rating
       }
 
-      const reviews = { totalRating: totalRating / courseReviews.length, courseReviews }
-      return res.status(200).json({ course: course[0], review: reviews })
+      const reviews = {
+        totalRating: totalRating / courseReviews.length,
+        courseReviews
+      }
+      return res.status(200).json({
+        course: course[0],
+        review: reviews
+      })
     } else {
       return res.status(200).json(GET_COURSE_BY_ID_FAILED) // not found!
     }
@@ -86,17 +107,23 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - response
    */
-  async addReview(req, res) {
+  async addReview (req, res) {
     const newReview = new Review()
 
     const courseID = req.body.courseID
 
     // to support lowercase
     const course = await Course.find({ courseID: courseID.toUpperCase() })
-    const exist = await Review.find({ courseID: courseID.toUpperCase(), studentID: req.body.studentID })
+    const exist = await Review.find({
+      courseID: courseID.toUpperCase(),
+      studentID: req.body.studentID
+    })
 
     if (exist.length > 0) {
-      return res.status(200).json({ POST_REVIEW_FAIL, message: 'Du kan inte recensera samma kurs flera gånger.' })
+      return res.status(200).json({
+        POST_REVIEW_FAIL,
+        message: 'Du kan inte recensera samma kurs flera gånger.'
+      })
     }
     if (res.locals.userName !== req.body.studentID) {
       // access denied!.
@@ -112,7 +139,10 @@ export class CourseController {
       await newReview.save()
       return res.status(200).json(POST_REVIEW)
     } else {
-      return res.status(200).json({ POST_REVIEW_FAIL, message: 'Kan inte hitta kursen' })
+      return res.status(200).json({
+        POST_REVIEW_FAIL,
+        message: 'Kan inte hitta kursen'
+      })
     }
   }
 
@@ -124,7 +154,7 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - response
    */
-  async editReview(req, res) {
+  async editReview (req, res) {
     const reviewID = req.body.reviewID
     const message = req.body.message
     const rating = req.body.rating
@@ -141,7 +171,10 @@ export class CourseController {
       await review.save()
       return res.status(200).json(EDIT_REVIEW)
     } else {
-      return res.status(200).json({ EDIT_REVIEW_FAIL, message: 'Kan inte hitta review.' })
+      return res.status(200).json({
+        EDIT_REVIEW_FAIL,
+        message: 'Kan inte hitta review.'
+      })
     }
   }
 
@@ -152,13 +185,16 @@ export class CourseController {
    * @param {object} res - Express response object.
    * @returns {JSON} - response
    */
-  async scoreReview(req, res) {
+  async scoreReview (req, res) {
     const reviewID = req.body.reviewID
     const review = await Review.findById(reviewID)
 
     if (review) {
       if (res.locals.userName === review.studentID) {
-        return res.status(200).json({ SCORE_REVIEW_FAIL, message: 'Du kan inte rata din egen review.' })
+        return res.status(200).json({
+          SCORE_REVIEW_FAIL,
+          message: 'Du kan inte rata din egen review.'
+        })
       }
 
       if (review.score.includes(res.locals.userName)) {
@@ -174,7 +210,23 @@ export class CourseController {
       await review.save()
       return res.status(200).json(SCORE_REVIEW)
     } else {
-      return res.status(200).json({ SCORE_REVIEW_FAIL, message: 'Kunde inte hitta review ' + reviewID })
+      return res.status(200).json({
+        SCORE_REVIEW_FAIL,
+        message: 'Kunde inte hitta review ' + reviewID
+      })
     }
+  }
+
+  /**
+   *
+   * Return the total number of reviews in the system.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @returns {JSON} - response
+   */
+  async totalReviews (req, res) {
+    const reviews = Review.find({})
+    return res.status(200).json({ totalReviews: reviews.count() })
   }
 }

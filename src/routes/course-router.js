@@ -10,6 +10,7 @@ const controller = new CourseController()
 const authcontroller = new AuthController()
 
 router.get('/search/:query', controller.search)
+router.get('totalreviews', controller.totalReviews)
 
 // router.post('/postreview', (req, res, next) => authcontroller.verifyToken(req, res, next), (req, res) => controller.addReview(req, res))
 router.post('/course/', (req, res) => controller.getCourse(req, res))
